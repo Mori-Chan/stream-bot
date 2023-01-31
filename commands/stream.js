@@ -131,8 +131,9 @@ module.exports = {
 			await interaction.reply('VCを中継します！');
 			return [connection1, connection2];
 		}
-		else {
-			await interaction.reply('BOTを参加させるVCを指定してください！');
-		}
+		// autocomplete不使用時はコメントアウトを解除
+		// else {
+		// 	await interaction.reply('BOTを参加させるVCを指定してください！');
+		// }
 	},
 };
