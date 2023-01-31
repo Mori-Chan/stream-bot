@@ -1,9 +1,9 @@
 # stream-bot
 ## 使い方
 * どっかしらのサイトを参考にして、下記のものを入れる。
-- discord.js (14.7.1)
-- node.js (18.13.0)
-- npm (8.19.3)
+    - discord.js (14.7.1)
+    - node.js (18.13.0)
+    - npm (8.19.3)
 
 * Botを２つ作成し、`index.js`の階層で`config.json`を作成。
 ```
