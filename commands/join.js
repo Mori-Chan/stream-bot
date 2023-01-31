@@ -14,16 +14,36 @@ module.exports = {
 				.setRequired(true)
 				.addChannelTypes(ChannelType.GuildVoice),
 		)
-		.addChannelOption((option) =>
+		.addStringOption((option) =>
 			option
 				.setName('channel2')
 				.setDescription('The channel that Speaker-bot join')
-				.setRequired(true)
-				.addChannelTypes(ChannelType.GuildVoice),
+				.setAutocomplete(true)
+				.setRequired(true),
 		),
+		async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		const vc = interaction.options.get('channel1');
+		const chats = interaction.guild.channels.cache;
+		const voiceChannels = chats.filter(file => file.type === 2);
+		let unSelectedVoiceChannels = [];
+
+		for (const voiceChannel of voiceChannels) {
+			if (voiceChannel[0] !== vc.value) {
+				unSelectedVoiceChannels.push(voiceChannel);
+			}
+		}
+		
+		const filtered = unSelectedVoiceChannels.filter(unSelectedVoiceChannel => unSelectedVoiceChannel[1].name.startsWith(focusedValue));
+
+		await interaction.respond(
+			
+			filtered.map(unSelectedVoiceChannel => ({ name: unSelectedVoiceChannel[1].name, value: unSelectedVoiceChannel[1].id })).slice(0, 25)
+		);
+	},
 	async execute(interaction, client1, client2) {
 		const voiceChannel1 = interaction.options.getChannel('channel1');
-		const voiceChannel2 = interaction.options.getChannel('channel2');
+		const voiceChannel2 = interaction.options.getString('channel2');
 		if (voiceChannel1 && voiceChannel2) {
 			if (voiceChannel1 === voiceChannel2) {
 				await interaction.reply('同じVCには参加できません🥺');
@@ -45,39 +65,13 @@ module.exports = {
 			const connection2 = joinVoiceChannel({
 				group: 'speaker',
 				guildId: interaction.guildId,
-				channelId: voiceChannel2.id,
+				channelId: voiceChannel2,
 				adapterCreator: client2.guilds.cache.get(interaction.guildId).voiceAdapterCreator,
 				selfMute: false,
 				selfDeaf: true,
 			});
-			// Listener-botが参加しているVCで誰かが話し出したら実行
-			connection1.receiver.speaking.on('start', (userId) => {
-				// VCの音声取得機能
-				const audio = connection1.receiver.subscribe(userId, {
-					end: {
-						behavior: EndBehaviorType.AfterSilence,
-						duration: 100,
-					},
-				});
-				// 音声をVCに流す機能
-				const player = createAudioPlayer({
-					behaviors: {
-						// 聞いている人がいなくても音声を中継してくれるように設定
-						noSubscriber: NoSubscriberBehavior.play,
-					},
-				});
-				const resource = createAudioResource(audio,
-					{
-						// VCから取得してきた音声はOpus型なので、Opusに設定
-						inputType: StreamType.Opus,
-					},
-				);
-				player.play(resource);
-				connection2.subscribe(player);
-				
-			});
 			await interaction.reply('VCに参加しました！');
-			// return [connection1, connection2];
+			return [connection1, connection2];
 		}
 		else {
 			await interaction.reply('BOTを参加させるVCを指定してください！');
