@@ -6,7 +6,7 @@ const { LISTENER, SPEAKER } = require('./config.json');
 const client1 = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 const client2 = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
-let connection = [];
+let connections = [];
 // 今回はListenner-botに対してのみコマンドを割り当ててみる。
 client1.commands = new Collection();
 
@@ -28,7 +28,7 @@ for (const file of commandFiles) {
 // コマンドが送られてきた際の処理
 client1.on(Events.InteractionCreate, async interaction => {
     // コマンドでなかった場合は処理せずさよなら。
-	if (!interaction.isChatInputCommand()) return;
+	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
 
@@ -40,17 +40,23 @@ client1.on(Events.InteractionCreate, async interaction => {
 
 	try {
         // コマンドを実行
-		if (interaction.commandName === 'join' || interaction.commandName === 'stream') {
-			connection = await command.execute(interaction, client1, client2);
+		if (interaction.commandName === 'join' || interaction.commandName === 'stream' || interaction.commandName ===  'autocomplete') {
+			connections = await command.execute(interaction, client1, client2);
 		}
 		else if (interaction.commandName === 'record') {
-			await command.execute(interaction, connection[0]);
+			await command.execute(interaction, connections[0]);
 		}
 		else if (interaction.commandName === 'play') {
-			await command.execute(interaction, connection[1]);
+			await command.execute(interaction, connections[1]);
+		}
+		else if (interaction.commandName === 'bye') {
+			await command.execute(interaction, connections);
 		}
 		else {
 			await command.execute(interaction);
+		}
+		if (interaction.isAutocomplete()) {
+			await command.autocomplete(interaction);
 		}
 	} catch (error) {
 		console.error(error);
