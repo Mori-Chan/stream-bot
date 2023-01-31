@@ -29,14 +29,14 @@
 * `index.js`の階層でコマンドプロンプト等を開き、`node index.js`を実行。
 
 * BOTに`Pong!`と返信してほしい時
-`/ping`を実行。
+    - `/ping`を実行。
 
 * VCによくわからん音を流したい時
-`/join`、`/play`を実行。
+    - `/join`、`/play`を実行。
 
 * VCの音を録音したい時
-`index.js`の階層で`rec`というフォルダを作成。
-`/join`、`/record`を実行。
+    - `index.js`の階層で`rec`というフォルダを作成。
+    - `/join`、`/record`を実行。
 
 * VCの音をべつのVCに中継したい時
-`/stream`を実行。
+    - `/stream`を実行。
