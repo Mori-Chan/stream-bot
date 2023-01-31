@@ -1,0 +1,10 @@
+{
+    "LISTENER": {
+        "CLIENT_ID": "ここにBOT1のCLIENT_IDを記述",
+        "TOKEN": "ここにBOT1のTOKENを記述"
+    },
+    "SPEAKER": {
+        "CLIENT_ID": "ここにBOT2のCLIENT_IDを記述",
+        "TOKEN": "ここにBOT2のTOKENを記述"
+    }
+}
