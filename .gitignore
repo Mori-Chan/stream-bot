@@ -4,4 +4,3 @@ config.json
 *.txt
 .vscode/
 *.mp3
-rec/*
