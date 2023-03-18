@@ -5,20 +5,9 @@
     - node.js (18.13.0)
     - npm (8.19.3)
 
-* Botを２つ作成し、`index.js`の階層で`config.json`を作成。
-```
-{
-    "LISTENER": {
-        "CLIENT_ID": "ここにBOT1のCLIENT_IDを記述",
-        "TOKEN": "ここにBOT1のTOKENを記述"
-    },
-    "SPEAKER": {
-        "CLIENT_ID": "ここにBOT2のCLIENT_IDを記述",
-        "TOKEN": "ここにBOT2のTOKENを記述"
-    },
-    "GUILD_ID": "ここにBOTを追加したサーバーのIDを記述"
-}
-```
+* Botを２つ作成。
+
+* `config copy.json`の名前を`config.json`に変更して中身を自分の環境に合わせて編集する。
 
 * `.zip`でダウンロード、展開。
 
@@ -38,5 +27,5 @@
     - `index.js`の階層で`rec`というフォルダを作成。
     - `/join`、`/record`を実行。
 
-* VCの音をべつのVCに中継したい時
+* VCの音を別のVCに中継したい時
     - `/stream`を実行。
